@@ -1,0 +1,73 @@
+\documentclass[a4paper, 12pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{lipsum} % For dummy text
+\usepackage{pxrubrica} % ルビを振るためのパッケージ
+\usepackage{zxjatype} % pLaTeXの日本語処理をXeLaTeXで利用するためのパッケージ
+\usepackage[ipaex]{zxjafont} % IPAexフォントを使用するためのパッケージ
+\usepackage[utf8]{inputenc} % 入力エンコーディングとしてUTF-8を使用
+\usepackage[T1]{fontenc} % 出力エンコーディングとしてT1を使用
+\usepackage[dvipdfmx]{graphicx} % dvipdfmxドライバを使用するための設定
+\usepackage{titling} % Add the titling package for the \subtitle command
+\usepackage{fancyhdr} % Add the fancyhdr package for custom page styles
+
+% Title
+\title{視線検出技術を利用した\\ドローン操縦システム\\「GazePilot」}
+\begin{document}
+\author{22J5-103 富永 光太郎 \and 22J5-128 舟橋 涼我 \and 22J5-135 増渕大秀}
+\date{\today}
+
+
+\maketitle
+
+
+\section{はじめに}
+% Add your introduction here
+GazePilotは、視線検出技術を利用してドローンを制御する革新的なシステムである。このシステムは、ユーザーの視線を用いて直感的なドローン操作を可能にする。視線の動きに応じてドローンが飛行する。このシステムは、視覚障害者や高齢者など、従来のドローン操作方法が難しいユーザーにとって特に有用であり、ドローンの利用範囲を拡大することができると期待される。
+
+\section{システム詳細}
+% Add your project methodology here
+PCのカメラでユーザーの顔を認識し、顔の特徴点を検出する。次に、顔の特徴点から目の中心座標と瞳孔の中心座標を計算し、これらの座標から視線の方向を推定する。推定された視線の方向に応じて、ドローンの飛行方向を制御する。
+% dlibライブラリを使用して顔の特徴点を検出し、視線の方向を推定する。次に、推定された視線の方向に応じて、ドローンの飛行方向を制御する。このシステムは、視線の方向に応じてドローンを自動的に制御するため、ユーザーはドローンを直感的に操作することができる。
+
+\section{使用技術}
+% Add your conclusion here
+GazePilotは、以下の技術を使用して開発する予定である。これらの技術を組み合わせることで、視線検出技術を実現する。
+\begin{itemize}
+    \item 顔検出技術: dlibライブラリを使用して顔の特徴点を検出する。
+    \item 画像処理技術: OpenCVライブラリを使用して画像処理を行う。
+\end{itemize}
+
+\newpage
+\section{操作詳細}
+ドローンの操作方法は、視線の動きに応じて異なる。具体的な操作方法の予定は以下の通りである。
+% Add your project methodology here
+\subsection{視線移動}
+視線を動かす方向に従ってドローンが移動する。具体的な操作方法は以下の通りである。
+\begin{itemize}
+    \item ユーザーが視線を上に移動させると、ドローンは上に飛行する。
+    \item ユーザーが視線を下に移動させると、ドローンは下に飛行する。
+    \item ユーザーが視線を左に移動させると、ドローンは左に飛行する。
+    \item ユーザーが視線を右に移動させると、ドローンは右に飛行する。
+\end{itemize}
+
+\subsection{片目状態}
+片目を閉じた状態で視線を動かすと、ドローンが旋回や上昇、下降する。具体的な操作方法は以下の通りである。
+\begin{itemize}
+    \item 片目を閉じた状態で視線を上に移動させると、ドローンは上昇する。
+    \item 片目を閉じた状態で視線を下に移動させると、ドローンは下降する。
+    \item 片目を閉じた状態で視線を左に移動させると、ドローンは左に旋回する。
+    \item 片目を閉じた状態で視線を右に移動させると、ドローンは右に旋回する。
+\end{itemize}
+
+\subsection{閉目状態}
+両目を閉じた状態で一定時間がすぎると、ドローンが自動着陸する。具体的な操作方法は以下の通りである。
+\begin{itemize}
+    \item 両目を閉じた状態で一定時間がすぎると、ドローンは自動着陸する。
+\end{itemize}
+
+% References (if any)
+% \bibliographystyle{plain}
+% \bibliography{references}
+\end{document}
