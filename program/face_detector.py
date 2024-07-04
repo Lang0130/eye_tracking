@@ -42,8 +42,8 @@ class FaceDetector:
         right_eye_img = self.extract_eye(frame, right_eye)
         left_pupil_center = self.find_pupil_center(left_eye_img)
         right_pupil_center = self.find_pupil_center(right_eye_img)
-        cv2.circle(frame, left_pupil_center, 10, color, -1)
-        cv2.circle(frame, right_pupil_center, 10, color, -1)
+        cv2.circle(frame, left_pupil_center, 1, color, -1)
+        cv2.circle(frame, right_pupil_center, 1, color, -1)
         print(f"Left pupil center: {left_pupil_center}")
         print(f"Right pupil center: {right_pupil_center}")
         return left_pupil_center, right_pupil_center
