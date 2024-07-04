@@ -18,8 +18,6 @@ class FaceDetector:
             print(f"Right eye and pupil difference: {right_diff}")
             print("\n")
 
-            if left_diff[0] > 0:
-                print("Left: Right") 
         return frame
 
     def show_eye(self, frame, d, color=(0, 255, 0)):
