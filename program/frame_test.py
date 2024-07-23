@@ -8,7 +8,6 @@ class FaceDetector:
         self.predictor = dlib.shape_predictor(predictor_path)
 
     def detect_faces(self, frame):
-        direction = ""
         dets = self.detector(frame, 1)
         for d in dets:
             left_eye_center, right_eye_center = self.show_eye(frame, d)
@@ -18,19 +17,6 @@ class FaceDetector:
             print(f"Left eye and pupil difference: {left_diff}")
             print(f"Right eye and pupil difference: {right_diff}")
             print("\n")
-            if left_diff[0] > 0 and right_diff[0] > 0:
-                direction = "左"
-            elif left_diff[0] < 0 and right_diff[0] < 0:
-                direction = "右"
-            else:
-                direction = "正面"
-            if left_diff[1] > 0 and right_diff[1] > 0:
-                direction += "上"
-            elif left_diff[1] < 0 and right_diff[1] < 0:
-                direction += "下"
-            else:
-                direction = "正面"
-        print(f"Direction: {direction}")
 
         return frame
 
@@ -60,6 +46,21 @@ class FaceDetector:
         cv2.circle(frame, right_pupil_center, 1, color, -1)
         print(f"Left pupil center: {left_pupil_center}")
         print(f"Right pupil center: {right_pupil_center}")
+
+        if left_pupil_center[0] > 0 and right_pupil_center[0] > 0:
+            direction = "左"
+        elif left_pupil_center[0] < 0 and right_pupil_center[0] < 0:
+            direction = "右"
+        else:
+            direction = "正面"
+
+        if left_pupil_center[1] > 0 and right_pupil_center[1] > 0:
+            direction += "上"
+        elif left_pupil_center[1] < 0 and right_pupil_center[1] < 0:
+            direction += "下"
+        else:
+            direction += "正面"
+        print(f"Direction: {direction}")
         return left_pupil_center, right_pupil_center
 
     def extract_eye(self, frame, eye_landmarks):
@@ -77,29 +78,17 @@ class FaceDetector:
         y, x = np.where(binary == 0)
         if len(x) > 0 and len(y) > 0:
             center = (int(np.mean(x)), int(np.mean(y)))
-        else:
-            print("Pupil not found")
         return center
     
 def main():
     face_detector = FaceDetector("data/shape_predictor_68_face_landmarks.dat")
-    capture = cv2.VideoCapture(0)
-    if not capture.isOpened():
-        print("カメラが見つかりません")
+    image = cv2.imread("data/png/up.png")
+    if image is None:
+        print("Failed to load image")
         exit()
-    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-    print(f"解像度: {capture.get(cv2.CAP_PROP_FRAME_WIDTH)}×{capture.get(cv2.CAP_PROP_FRAME_HEIGHT)}")
-    count_sec = 0
-    while True:
-        ret, frame = capture.read()
-        if count_sec % 30 == 0:
-            frame = face_detector.detect_faces(frame)
-        cv2.imshow('frame', frame)
-        count_sec += 1
-        if cv2.waitKey(1) == 27:
-            break
-    capture.release()
-    cv2.destroyAllWindows()
+    frame = cv2.resize(image, (1280, 720))
+    frame = face_detector.detect_faces(frame)
+    cv2.imshow("Frame", frame)
 
 if __name__ == "__main__":
     main()
