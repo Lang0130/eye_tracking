@@ -47,20 +47,11 @@ class FaceDetector:
         print(f"Left pupil center: {left_pupil_center}")
         print(f"Right pupil center: {right_pupil_center}")
 
-        if left_pupil_center[0] > 0 and right_pupil_center[0] > 0:
-            direction = "左"
-        elif left_pupil_center[0] < 0 and right_pupil_center[0] < 0:
-            direction = "右"
-        else:
-            direction = "正面"
+        # それぞれの目の中心と瞳孔の中心を結ぶ線を描画
+        cv2.line(frame, left_eye[0], left_pupil_center, color, 1)
+        cv2.line(frame, right_eye[0], right_pupil_center, color, 1)
 
-        if left_pupil_center[1] > 0 and right_pupil_center[1] > 0:
-            direction += "上"
-        elif left_pupil_center[1] < 0 and right_pupil_center[1] < 0:
-            direction += "下"
-        else:
-            direction += "正面"
-        print(f"Direction: {direction}")
+        
         return left_pupil_center, right_pupil_center
 
     def extract_eye(self, frame, eye_landmarks):
