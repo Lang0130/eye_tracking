@@ -5,15 +5,18 @@ import numpy as np
 thresh = 50
 
 detector = dlib.get_frontal_face_detector()
-predictor_path = "data/shape_predictor_68_face_landmarks.dat"
-predictor = dlib.shape_predictor(predictor_path)
+PREDICTOR_PATH = "data/shape_predictor_68_face_landmarks.dat"
+predictor = dlib.shape_predictor(PREDICTOR_PATH)
 
-cap = cv2.VideoCapture(0)
-print(cap.get(cv2.CAP_PROP_FPS))
+x_max = None
+x_min = None
+y_max = None
+y_min = None
 
-x_max, x_min, y_max, y_min, x_r, x_l, y_t, y_b = None, None, None, None, None, None, None, None
-
-capture = cv2.VideoCapture(0)
+x_r = None
+x_l = None
+y_t = None
+y_b = None
 
 # 画像比率を維持しながら縦横を指定して拡大する 余った部分は白でパディング 
 def resize_with_pad(image,new_shape,padding_color=[255,255,255]):
@@ -140,16 +143,11 @@ def set_xy(x_max,x_min,y_max,y_min):
     else:
         return None,None,None,None
 
-if not capture.isOpened():
-    print("カメラが見つかりません")
-    exit()
-capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-print(f"解像度: {capture.get(cv2.CAP_PROP_FRAME_WIDTH)}×{capture.get(cv2.CAP_PROP_FRAME_HEIGHT)}")
-
 print("カメラを起動しました")
 print("目線をカメラに向け、Enterキーを押してください")
 while True:
     ret, frame = capture.read()
+    cv2.imshow("frame", frame)
     dets = detector(frame[:, :, ::-1])
     if len(dets) > 0:
         parts = predictor(frame, dets[0]).parts()
@@ -161,12 +159,7 @@ while True:
             def_Left_eye_pupil_center = (Left_eye_pupil_center_x, Left_eye_pupil_center_y)
 
             break
-    cv2.imshow("frame", frame)
 
-    key = cv2.waitKey(1)
-    # エスケープキーを押して終了します
-    if key == 27:
-        break
 print("正面の目線を記憶しました")
 print("----------視線推定を開始します----------")
 
@@ -188,13 +181,11 @@ while True:
         # 右目のずれ
         if Right_eye_pupil_center_x != None and Right_eye_pupil_center_y != None:
             cv2.line(frame_copy, def_Right_eye_pupil_center, Right_eye_pupil_center, (0, 0, 255), thickness=3, lineType=cv2.LINE_4)
-            cv2.putText(frame_copy, f"Right_diff : {(def_Right_eye_pupil_center[0]-Right_eye_pupil_center_x, def_Right_eye_pupil_center[1]-Right_eye_pupil_center_y)}", (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
+            cv2.putText(frame_copy, f"Right_diff : {(def_Right_eye_pupil_center[0]-Right_eye_pupil_center_x, def_Right_eye_pupil_center[1]-Right_eye_pupil_center_y)}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
         # 左目のずれ
         if Left_eye_pupil_center_x != None and Left_eye_pupil_center_y != None:
             cv2.line(frame_copy, def_Left_eye_pupil_center, Left_eye_pupil_center, (0, 0, 255), thickness=3, lineType=cv2.LINE_4)
-            cv2.putText(frame_copy, f"Left_diff : {(def_Left_eye_pupil_center[0]-Left_eye_pupil_center_x, def_Left_eye_pupil_center[1]-Left_eye_pupil_center_y)}", (10, 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
-    else:
-        frame_copy = frame.copy()
+            cv2.putText(frame_copy, f"Left_diff : {(def_Left_eye_pupil_center[0]-Left_eye_pupil_center_x, def_Left_eye_pupil_center[1]-Left_eye_pupil_center_y)}", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
 
     cv2.imshow("frame", frame_copy)
 
